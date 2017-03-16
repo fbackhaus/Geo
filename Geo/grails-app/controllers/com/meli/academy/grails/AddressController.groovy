@@ -1,17 +1,27 @@
 package com.meli.academy.grails
 
+import grails.converters.JSON
+
 class AddressController {
-	
+
 	def geoService
 	
-	def index() {
+	static mediosPago = ['Todos','Carga Virtual', 'PagoFacil', 'Rapipago', 'Redlink', 'BaproPagos']
 
+	def index() {
+		[mediosPago: mediosPago]
+	}
+
+	def getCoordenadas(params) {
+		def direccion = params.direccion.toString().replace(" ", "+")
+		def coordenadas = geoService.getCoordenadas(direccion)
+		render coordenadas as JSON
 	}
 	
-	def getCoordenadas(String direccion) {
-		direccion = direccion.replace(" ", "+")
-		def coordenadas = geoService.getCoordenadas(direccion)
-		println(geoService.getPayments(coordenadas.latitud[0].toString(),coordenadas.longitud[0].toString()))
+	def getPayments(params) {
+		def latitud = params.latitud
+		def longitud = params.longitud
+		def listaSucursales = geoService.getPayments(params.latitud.toString(), params.longitud.toString(), params.radio, params.cantResultados)
+		[listaSucursales:listaSucursales, mediosPago:mediosPago]
 	}
-
 }

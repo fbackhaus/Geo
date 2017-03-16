@@ -22,8 +22,8 @@ class GeoService {
 
     }
 	
-	def getPayments(String latitud, String longitud) {
-		def url = new URL('https://api.mercadolibre.com/sites/MLA/payment_methods/agencies/search?near_to='+latitud+','+longitud+'&limit=5')
+	def getPayments(String latitud, String longitud, String radio, String cantResultados) {
+		def url = new URL("https://api.mercadolibre.com/sites/MLA/payment_methods/agencies/search?near_to="+latitud+","+longitud+","+radio+"&limit="+cantResultados)
 		def connection = (HttpURLConnection)url.openConnection()
 		connection.setRequestMethod("GET")
 		connection.setRequestProperty("Accept", "application/json")
@@ -32,9 +32,14 @@ class GeoService {
 		def suc = json.parse(connection.getInputStream()).results
 		def sucursales = []
 		suc.each {
-			println(it.agency_code)
+			def direccion = [ciudad:it.address.city, codigoPostal:it.address.zip_code,
+				direccion:it.address.address_line, estado:it.address.state, 
+				pais:it.address.country, ubicacion: it.address.location]
+			def sucursal = [direccion:direccion, descripcion:it.description, 
+				codigoAgencia:it.agency_code, distancia: it.distance, 
+				idMetodoPago:it.payment_method_id]
+			sucursales.add(sucursal)
 		}
-//		def address = [direccion:coordenadas.formatted_address, latitud: coordenadas.geometry.location.lat, longitud: coordenadas.geometry.location.lng]
-//		return address
+		return sucursales
 	}
 }
