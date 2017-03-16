@@ -103,8 +103,9 @@
 				var latitud = resultado.coords.latitude;
 				var longitud = resultado.coords.longitude;
 				var radio = $("#radio").val();
+				var metodoPago = $("#mediosPago").val();
 				var cantResultados = $("#cantidadResultados").val();
-				getMediosOff(latitud, longitud, radio, cantResultados);
+				getMediosOff(latitud, longitud, radio, cantResultados, metodoPago);
 			}
 		
 			function funcionNo(err) {
@@ -112,10 +113,10 @@
 				console.log(err);
 			}
 
-			function getMediosOff(latitud, longitud, radio, cantResultados){
+			function getMediosOff(latitud, longitud, radio, cantResultados, metodoPago){
 				<g:remoteFunction action="getPayments"
 					controller="address"
-					params= "\'latitud=\'+ latitud +\'&longitud=\'+ longitud +\'&radio=\'+ radio +\'&cantResultados=\'+ cantResultados"
+					params= "\'latitud=\'+ latitud +\'&longitud=\'+ longitud +\'&radio=\'+ radio +\'&metodoPago=\' + metodoPago +\'&cantResultados=\'+ cantResultados"
 					update="divLugares"
 					onLoading="funcionCargandoLugares()"
 					onSuccess="funcionExitoBusqueda(data)"
@@ -161,9 +162,10 @@
 				ocultarCargando();
 				var radio = $("#radio").val();
 				var cantResultados = $("#cantidadResultados").val();
+				var metodoPago = $("#mediosPago").val();
 				console.log(radio)
 				console.log(cantResultados)
-				getMediosOff(resultado.latitud, resultado.longitud, radio, cantResultados);
+				getMediosOff(resultado.latitud, resultado.longitud, radio, cantResultados, metodoPago);
 			}
 
 			function funcionCargandoCoordenadas(){

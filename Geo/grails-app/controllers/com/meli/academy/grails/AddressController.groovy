@@ -21,7 +21,7 @@ class AddressController {
 	def getPayments(params) {
 		def latitud = params.latitud
 		def longitud = params.longitud
-		def listaSucursales = geoService.getPayments(params.latitud.toString(), params.longitud.toString(), params.radio, params.cantResultados)
+		def listaSucursales = geoService.getPayments(params.latitud.toString(), params.longitud.toString(), params.radio, params.cantResultados, params.metodoPago)
 		[listaSucursales:listaSucursales, mediosPago:mediosPago]
 	}
 }

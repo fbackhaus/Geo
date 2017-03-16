@@ -22,8 +22,18 @@ class GeoService {
 
     }
 	
-	def getPayments(String latitud, String longitud, String radio, String cantResultados) {
-		def url = new URL("https://api.mercadolibre.com/sites/MLA/payment_methods/agencies/search?near_to="+latitud+","+longitud+","+radio+"&limit="+cantResultados)
+	def getPayments(String latitud, String longitud, String radio, String cantResultados, String metodoPago) {
+		String strUrl
+		if(metodoPago.equals("Todos")){
+			metodoPago = ""
+		strUrl = "https://api.mercadolibre.com/sites/MLA/payment_methods/"+metodoPago+"agencies/search?near_to="+latitud+","+longitud+","+radio+"&limit="+cantResultados
+		}
+		else {
+			metodoPago = metodoPago.toLowerCase() + "/";
+			strUrl = "https://api.mercadolibre.com/sites/MLA/payment_methods/"+metodoPago+"agencies?near_to="+latitud+","+longitud+","+radio+"&limit="+cantResultados
+			
+		}
+		def url = new URL(strUrl)
 		def connection = (HttpURLConnection)url.openConnection()
 		connection.setRequestMethod("GET")
 		connection.setRequestProperty("Accept", "application/json")
